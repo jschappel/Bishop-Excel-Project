@@ -6,12 +6,12 @@ import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
  * Created by joshuaschappel on 12/8/17.
  */
+
 public class Sort {
 
     private ArrayList<String> dioceseArray = new ArrayList<String>();
@@ -35,7 +35,6 @@ public class Sort {
     private String website;
 
 
-    private List<TestDiocese> testDioceseList = new ArrayList<TestDiocese>();
     private Document document;
 
     protected Sort(String webpage) throws IOException {
@@ -165,7 +164,7 @@ public class Sort {
 
             Elements testele = element.select("tr[valign=top]");
             for (Element ele : testele) {
-                System.out.println("\n");
+                //System.out.println("\n");
 
                 // Address1, address2, city, zip, website
                 Element ele2 = ele.select("td[style=padding-left:30px!important; margin-top:0px!important;font-size:11px!important;color:#555!important;]").first();
@@ -193,26 +192,6 @@ public class Sort {
         return dioList;
     }
 
-
-    protected String listToString() {
-        List<String> array = new ArrayList<>();
-
-        for (TestDiocese value : testDioceseList) {
-            array.add(value.toString());
-        }
-        return array.toString();
-    }
-
-    protected String sortDone() {
-        String[] array = new String[testDioceseList.size()];
-        int index = 0;
-        for (TestDiocese value : testDioceseList) {
-            System.out.println(value.getState());
-            array[index] = value.getState();
-            index++;
-        }
-        return array.toString();
-    }
 
     private int countOccurences(
             String someString, char searchedChar, int index) {
