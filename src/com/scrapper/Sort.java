@@ -29,8 +29,6 @@ public class Sort {
     private String address1;
     private String address2;
 
-
-
     //TODO
     private String website;
 
@@ -178,7 +176,7 @@ public class Sort {
                 //create bishop objects and put them in a list.
                 Dioceses dioceses = new Dioceses("TODO",firstNameList,middleNameList,lastNameList,suffixList,titleList,"TODO",dioceseArray.get(index),address1,address2,city,state,zipCode);
                 dioList.add(dioceses);
-                //System.out.println(dioceses.returnFirst());
+                System.out.println(dioceses.returnFirst());
                 firstNameList.clear();
                 lastNameList.clear();
                 middleNameList.clear();

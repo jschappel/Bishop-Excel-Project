@@ -37,6 +37,10 @@ public class Dioceses {
         this.zip = zip;
     }
 
+    protected void sortByDiocese(ArrayList<Dioceses> list){
+
+    }
+
     protected String returnFirst(){
         String names = "";
         System.out.println(first.size());

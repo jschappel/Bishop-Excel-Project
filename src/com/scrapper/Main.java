@@ -29,17 +29,16 @@ public class Main extends JFrame implements ActionListener {
             e.printStackTrace();
         }
 
-
+        //set up the File Chooser
         openFileChooser = new JFileChooser();
         openFileChooser.setCurrentDirectory(new File("c:\\temp"));
-        openFileChooser.setFileFilter(new FileNameExtensionFilter("xlsx", "xlsx","xlsm","xlsb","xls","xlt"));
+        openFileChooser.setFileFilter(new FileNameExtensionFilter("Excel Spreadsheet", "xlsx","xlsm","xlsb","xls","xlt"));
 
         //Create and set up the window.
-        frame = new JFrame("GridBagLayoutDemo");
+        frame = new JFrame("BishopList");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //Set up the content pane.
         addComponentsToPane(frame.getContentPane());
-        //frame.setSize(500,400);
 
         //Display the window.
         frame.pack();
@@ -47,7 +46,6 @@ public class Main extends JFrame implements ActionListener {
         frame.setResizable(false);
         frame.setVisible(true);
     }
-
 
     public static void main (String[] args) throws IOException {
 
@@ -57,14 +55,6 @@ public class Main extends JFrame implements ActionListener {
                 //createAndShowGUI();
             }
         });
-
-
-
-
-
-        String webpage = "http://www.usccb.org/about/bishops-and-dioceses/all-dioceses.cfm";
-        Sort sort = new Sort(webpage);
-        sort.findAttributes();
 
     /*
         ArrayList<Dioceses> dioceseList = sort.returnDioceseObjectList();
@@ -80,9 +70,16 @@ public class Main extends JFrame implements ActionListener {
         }
     */
 
-
     }
 
+    private void runMainProgram() throws IOException{
+        String webpage = "http://www.usccb.org/about/bishops-and-dioceses/all-dioceses.cfm";
+        Sort sort = new Sort(webpage);
+        sort.findAttributes();
+    }
+
+    //TODO
+    //clean up button code so comments and names are correct
     private void addComponentsToPane(Container pane) {
 
         if (RIGHT_TO_LEFT) {
@@ -180,6 +177,11 @@ public class Main extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String arg = e.getActionCommand();
+
+        //TODO
+        //remove following line
+        isFileSelected = true; //remove this line
+
         if(arg.equals("Open")){
             int returnValue = openFileChooser.showOpenDialog(frame);
 
@@ -206,10 +208,16 @@ public class Main extends JFrame implements ActionListener {
 
         if (arg.equals("run") && isFileSelected){
             System.out.println("Working");
+            try{
+                runMainProgram();
+            } catch (IOException io) {
+                System.out.print("There is an error with the Website please retry later.");
+                io.printStackTrace();
+            }
+
         } else if(arg.equals("run") && !isFileSelected) {
             messageLable.setForeground(Color.RED);
             messageLable.setText("No File Chosen");
         }
-
     }
 }
