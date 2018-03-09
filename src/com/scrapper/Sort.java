@@ -4,6 +4,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -28,9 +30,9 @@ public class Sort {
     private String city;
     private String address1;
     private String address2;
-
     //TODO
     private String website;
+    private int i = 0;
 
 
     private Document document;
@@ -65,7 +67,7 @@ public class Sort {
             newString = html.substring(0, indexOfUrl);
 
         // Extract data from string
-        int occurrences = countOccurences(newString, '|', 0);
+        int occurrences = countOccurrences(newString, '|', 0);
         if (occurrences == 1) {
             int cityIndex = newString.lastIndexOf("|");
             int stateComma = newString.lastIndexOf(",");
@@ -177,6 +179,7 @@ public class Sort {
                 Dioceses dioceses = new Dioceses("TODO",firstNameList,middleNameList,lastNameList,suffixList,titleList,"TODO",dioceseArray.get(index),address1,address2,city,state,zipCode);
                 dioList.add(dioceses);
                 System.out.println(dioceses.returnFirst());
+                i = i + dioceses.size1();
                 firstNameList.clear();
                 lastNameList.clear();
                 middleNameList.clear();
@@ -184,6 +187,7 @@ public class Sort {
                 index++;
             }
         }
+        System.out.println(i);
     }
 
     protected ArrayList<Dioceses> returnDioceseObjectList() {
@@ -191,14 +195,14 @@ public class Sort {
     }
 
 
-    private int countOccurences(
+    private int countOccurrences(
             String someString, char searchedChar, int index) {
         if (index >= someString.length()) {
             return 0;
         }
 
         int count = someString.charAt(index) == searchedChar ? 1 : 0;
-        return count + countOccurences(
+        return count + countOccurrences(
                 someString, searchedChar, index + 1);
     }
 }

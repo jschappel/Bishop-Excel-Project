@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class View {
 
+
     public View() {
         // Create a jFrame and display the panel in it
 
@@ -94,7 +95,7 @@ public class View {
         pane.add(messageLable,c);
 
         //Add action Listener to openFile
-        Controller openController = new Controller(openFile, messageLable);
+        Controller openController = new Controller(messageLable);
         openFile.addActionListener(openController);
 
         JButton runButton = new JButton("Run");
@@ -109,7 +110,6 @@ public class View {
 
 
         // Add actionListener to runButton
-        Controller runController = new Controller(runButton, messageLable);
-        runButton.addActionListener(runController);
+        runButton.addActionListener(openController);
     }
 }

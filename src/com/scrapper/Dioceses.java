@@ -37,8 +37,8 @@ public class Dioceses {
         this.zip = zip;
     }
 
-    protected void sortByDiocese(ArrayList<Dioceses> list){
-
+    protected String getDioceseName(){
+        return this.dioceseName;
     }
 
     protected String returnFirst(){
@@ -48,5 +48,9 @@ public class Dioceses {
             names = names + " " + title.get(i) + " " + first.get(i) + " " + middle.get(i) + " " + last.get(i) + " " + suffix.get(i) + " " + dioceseName + " " + address1 +  " " + address2 + " " + city + " " + state +  " " + zip + "\n";
         }
         return names.trim();
+    }
+
+    protected int size1() {
+        return first.size();
     }
 }

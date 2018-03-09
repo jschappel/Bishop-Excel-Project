@@ -12,22 +12,14 @@ import java.io.IOException;
 
 public class Controller implements ActionListener {
 
-    private Boolean isFileSelected = false;
+    private Boolean isFileSelected = true;
 
-    private JButton button;
-    private JLabel messageLable;
-    private JFrame frame;
+    private JLabel messageLabel;
 
-    Controller(JButton button, JLabel messageLable){
+    // open button, run button
+    Controller(JLabel messageLable){
         super();
-        this.button = button;
-        this.messageLable = messageLable;
-    }
-
-    Controller(JButton button, JLabel messageLable, JFrame frame){
-        this.button = button;
-        this.messageLable = messageLable;
-        this.frame = frame;
+        this.messageLabel = messageLable;
     }
 
 
@@ -51,36 +43,33 @@ public class Controller implements ActionListener {
             openFileChooser.setAcceptAllFileFilterUsed(false);
             openFileChooser.setFileFilter(new FileNameExtensionFilter("Excel Spreadsheet", "xlsx","xlsm","xlsb","xls","xlt"));
 
-
-            int returnValue = openFileChooser.showOpenDialog(frame);
+            int returnValue = openFileChooser.showOpenDialog(new Frame());
 
             if (returnValue == JFileChooser.APPROVE_OPTION){
 
-
                 try{
                     BufferedImage ob = ImageIO.read(openFileChooser.getSelectedFile());
-                    messageLable.setText("Success");
-                    messageLable.setForeground(Color.decode("#08753f"));
+                    messageLabel.setText("Success");
+                    messageLabel.setForeground(Color.decode("#08753f"));
                     isFileSelected = true;
 
                     //File filePath = openFileChooser.getCurrentDirectory();
                     //path.setText(filePath.toString());
                 } catch (IOException ioe){
-                    messageLable.setForeground(Color.RED);
-                    messageLable.setText("Failed");
+                    messageLabel.setForeground(Color.RED);
+                    messageLabel.setText("Failed");
                     isFileSelected = false;
                 }
             } else {
                 isFileSelected = false;
-                messageLable.setForeground(Color.RED);
-                messageLable.setText("No File Chosen");
+                messageLabel.setForeground(Color.RED);
+                messageLabel.setText("No File Chosen");
             }
         }
-
         if (arg.equals("run") && isFileSelected){
             System.out.println("Working");
-            try{
 
+            try{
                 //TODO
                 // Shrink this code to be more readable
                 String webpage = "http://www.usccb.org/about/bishops-and-dioceses/all-dioceses.cfm";
@@ -93,8 +82,8 @@ public class Controller implements ActionListener {
             }
 
         } else if(arg.equals("run") && !isFileSelected) {
-            messageLable.setForeground(Color.RED);
-            messageLable.setText("No File Chosen");
+            messageLabel.setForeground(Color.RED);
+            messageLabel.setText("No File Chosen");
         }
 
     }
