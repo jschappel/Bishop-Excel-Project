@@ -4,10 +4,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -23,7 +22,8 @@ public class Sort {
     private ArrayList<String> titleList = new ArrayList<>();
     private ArrayList<String> stateList = new ArrayList<>();
     private ArrayList<String> suffixList = new ArrayList<>();
-    private ArrayList<Dioceses> dioList= new ArrayList<>();
+
+    private BishopList bishopList = new BishopList();
 
     private String state;
     private String zipCode;
@@ -33,12 +33,12 @@ public class Sort {
     //TODO
     private String website;
     private int i = 0;
-
-
+    private ArrayList suffixs = new ArrayList();
     private Document document;
 
     protected Sort(String webpage) throws IOException {
         document = Jsoup.connect(webpage).get();
+        suffixs.addAll(Arrays.asList("OMI","CM","C.Ss.R","SJ","OSBM","SF","CSC","SSJ","SM","OFM Conv","CPPS","MSpS","CMF","OSB","SVD","OMF Cap","SDB","BSD","SDV","MLM","CSsR","ORA","CSB","C.P.","C.O."));
     }
 
     private ArrayList<String> dioceseList(Elements elements, ArrayList<String> list) {
@@ -110,16 +110,30 @@ public class Sort {
                     String[] nameString = splitString[i].split(" ");
 
                     if (nameString.length == 4) {
-                        firstNameList.add(nameString[0].trim());
-                        middleNameList.add(nameString[1].trim());
-                        lastNameList.add(nameString[2].trim());
-                        suffixList.add(nameString[3].trim());
+                        if(suffixs.contains(nameString[nameString.length -1])) {
+                            firstNameList.add(nameString[0].trim());
+                            middleNameList.add(nameString[1].trim());
+                            lastNameList.add(nameString[2].trim());
+                            suffixList.add(nameString[3].trim());
+                        } else {
+                            firstNameList.add(nameString[0].trim());
+                            middleNameList.add(nameString[1].trim());
+                            lastNameList.add(nameString[2].trim() + " " + nameString[3].trim());
+                            suffixList.add(null);
+                        }
 
                     } else if (nameString.length == 3) {
-                        firstNameList.add(nameString[0].trim());
-                        middleNameList.add(nameString[1].trim());
-                        lastNameList.add(nameString[2].trim());
-                        suffixList.add(null);
+                        if(suffixs.contains(nameString[nameString.length -1])) {
+                            firstNameList.add(nameString[0].trim());
+                            middleNameList.add(null);
+                            lastNameList.add(nameString[1].trim());
+                            suffixList.add(nameString[2].trim());
+                        } else {
+                            firstNameList.add(nameString[0].trim());
+                            middleNameList.add(nameString[1].trim());
+                            lastNameList.add(nameString[2].trim());
+                            suffixList.add(null);
+                        }
                     } else if (nameString.length == 2) {
                         firstNameList.add(nameString[0].trim());
                         middleNameList.add(null);
@@ -175,25 +189,21 @@ public class Sort {
                 Element e = ele.select("td.personnel").first();
                 bishopNames(e);
 
-                //create bishop objects and put them in a list.
-                Dioceses dioceses = new Dioceses("TODO",firstNameList,middleNameList,lastNameList,suffixList,titleList,"TODO",dioceseArray.get(index),address1,address2,city,state,zipCode);
-                dioList.add(dioceses);
-                System.out.println(dioceses.returnFirst());
-                i = i + dioceses.size1();
+                for(int index2 = 0; index2 < firstNameList.size(); index2++) {
+                    Bishop bishop = new Bishop("TODO",firstNameList.get(index2),middleNameList.get(index2),lastNameList.get(index2),suffixList.get(index2),titleList.get(index2),"TODO",dioceseArray.get(index),address1,address2,city,state,zipCode);
+                    bishopList.add(bishop);
+                    //System.out.println(bishop.getBishopLastName());
+                }
+
                 firstNameList.clear();
                 lastNameList.clear();
                 middleNameList.clear();
                 suffixList.clear();
+                titleList.clear();
                 index++;
             }
         }
-        System.out.println(i);
     }
-
-    protected ArrayList<Dioceses> returnDioceseObjectList() {
-        return dioList;
-    }
-
 
     private int countOccurrences(
             String someString, char searchedChar, int index) {

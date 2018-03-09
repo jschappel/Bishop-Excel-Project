@@ -76,6 +76,8 @@ public class Controller implements ActionListener {
                 Sort sort = new Sort(webpage);
                 sort.findAttributes();
 
+                System.out.println("Finished");
+
             } catch (IOException io) {
                 System.out.print("There is an error with the Website please retry later.");
                 io.printStackTrace();
