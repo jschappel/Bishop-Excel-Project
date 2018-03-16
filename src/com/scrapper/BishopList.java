@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class BishopList {
-    ArrayList<Bishop> bishopList;
+    private ArrayList<Bishop> bishopList;
 
 
     public BishopList() {

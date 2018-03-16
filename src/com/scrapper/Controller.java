@@ -53,8 +53,12 @@ public class Controller implements ActionListener {
                     messageLabel.setForeground(Color.decode("#08753f"));
                     isFileSelected = true;
 
-                    //File filePath = openFileChooser.getCurrentDirectory();
-                    //path.setText(filePath.toString());
+                    ExcelWrite write = new ExcelWrite();
+                    try {
+                        write.extract();
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
                 } catch (IOException ioe){
                     messageLabel.setForeground(Color.RED);
                     messageLabel.setText("Failed");
