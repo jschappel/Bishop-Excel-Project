@@ -3,15 +3,13 @@ package com.scrapper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 
-public class BishopList {
+public class BishopList implements Iterable<Bishop>{
     private ArrayList<Bishop> bishopList;
 
-
     public BishopList() {
-
         bishopList = new ArrayList<>();
-
     }
 
     protected void add(Bishop bishop) {
@@ -19,15 +17,19 @@ public class BishopList {
             Comparator<Bishop> comp = new Comparator<Bishop>() {
                 @Override
                 public int compare(Bishop o1, Bishop o2) {
-                    return o1.getBishopLastName().compareTo(o2.getBishopLastName());
+                    return o1.getLast().compareTo(o2.getLast());
                 }
             };
 
-            int index = Collections.binarySearch(bishopList, new Bishop(null, null, null, bishop.getBishopLastName(), null, null, null, null, null, null, null, null, null), comp);
+            int index = Collections.binarySearch(bishopList, new Bishop(null, null, null, bishop.getLast(), null, null, null, null, null, null, null, null, null, null), comp);
             bishopList.add(Math.abs(index) -1, bishop);
         } else{
             bishopList.add(bishop);
         }
+    }
+
+    protected Bishop get(int index){
+        return bishopList.get(index);
     }
 
     protected int size(){
@@ -38,8 +40,13 @@ public class BishopList {
     public String toString() {
         String s = "";
         for(Bishop item: this.bishopList){
-            s =  s + "\n" + item.getBishopLastName();
+            s =  s + "\n" + item.getLast();
         }
         return s;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return bishopList.iterator();
     }
 }

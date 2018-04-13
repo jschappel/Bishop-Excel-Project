@@ -1,0 +1,32 @@
+.root{
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 10pt;
+}
+
+.button{
+    -fx-font-weight: bold;
+    -fx-background-color: #81c784;
+    -fx-background-radius: 22;
+    -fx-font-size: 13;
+    -fx-text-fill: white;
+}
+
+.button:pressed {
+    -fx-font-weight: bold;
+    -fx-background-color: white;
+    -fx-background-radius: 22;
+    -fx-font-size: 13;
+    -fx-text-fill: #81c784;
+    -fx-border-color: #81c784;
+    -fx-border-radius: 20;
+    -fx-border-width: 3;
+}
+
+.button-blue{
+    -fx-background-color: #7CAFC2;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 4;
+}
+#bold-label{
+    -fx-font-weight: bold;
+}

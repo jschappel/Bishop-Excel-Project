@@ -21,9 +21,10 @@ public class Bishop {
     private String city;
     private String state;
     private String zip;
+    private String dioShortName;
 
 
-    protected Bishop(String sal, String first, String middle, String last, String suffix, String title, String insideSal, String dioceseName, String address1, String address2, String city, String state, String zip){
+    protected Bishop(String sal, String first, String middle, String last, String suffix, String title, String insideSal, String dioShortName, String dioceseName, String address1, String address2, String city, String state, String zip){
         this.sal = sal;
         this.first = first;
         this.middle = middle;
@@ -37,13 +38,50 @@ public class Bishop {
         this.city = city;
         this.state = state;
         this.zip = zip;
+        this.dioShortName = dioShortName;
     }
 
+    protected String getState() {
+        return this.state;
+    }
+    protected String getInsideSal() {
+        return this.insideSal;
+    }
+    protected String getAddress1() {
+        return this.address1;
+    }
+    protected String getAddress2() {
+        return this.address2;
+    }
+    protected String getZip() {
+        return this.zip;
+    }
     protected String getDioceseName(){
         return this.dioceseName;
     }
-
-    protected String getBishopLastName() {
+    protected String getSal(){
+        return this.sal;
+    }
+    protected String getTitle(){
+        return this.title;
+    }
+    protected String getDioShortName(){
+        return this.dioShortName;
+    }
+    protected String getCity() {
+        return this.city;
+    }
+    protected String getLast() {
         return this.last;
     }
+    protected String getFirst() {
+        return this.first;
+    }
+    protected String getMiddle() {
+        return this.middle;
+    }
+    protected String getSuffix(){
+        return this.suffix;
+    }
+
 }

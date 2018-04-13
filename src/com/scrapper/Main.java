@@ -1,21 +1,25 @@
 package com.scrapper;
 
-public class Main {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-    private static void createAndShowGUI() throws Exception {
-        new View();
+public class Main  extends Application{
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
+        primaryStage.setTitle("Bishop Finder");
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("RenewStyle.css");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    public static void main (String[] args) {
-
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    createAndShowGUI();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public static void main(String[] args) {
+        launch(args);
     }
 }
