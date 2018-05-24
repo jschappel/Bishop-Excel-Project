@@ -1,22 +1,18 @@
 package com.scrapper;
 
-
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller {
 
@@ -45,7 +41,35 @@ public class Controller {
         }
     }
 
-    public void runProgram(){
+    /*
+    public void saveFile() {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save");
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel File","*.xlsm","*.xlsx","*xlsb","*xls","*xlt"));
+
+        File file = fc.showSaveDialog(primaryStage);
+
+        if(file != null){
+            SaveFile("FileName", file);
+        }
+
+    }
+
+    */
+
+    private void SaveFile(String content, File file) {
+        try {
+            FileWriter fileWriter = null;
+
+            fileWriter = new FileWriter(file);
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void runProgram() throws IOException, NoSuchMethodException {
 
         //check to see if the radio button was pressed and not "choose file"
         if(wasSelected == false && radioChoice.isSelected()) {
@@ -54,9 +78,6 @@ public class Controller {
             pIndicator.progressProperty().bind(excelWrite.progressProperty());
 
             new Thread(excelWrite).start();
-
-            //ExcelWrite.newExcelDocument("Test_File");
-            System.out.println("Add code here to create a blank excel sheet");
         }
         // If both are selected go with the file
         else if(wasSelected == true && radioChoice.isSelected()){
@@ -64,12 +85,20 @@ public class Controller {
         }
         // If just the "choose file" option happened
         else if(wasSelected == true && !radioChoice.isSelected()){
-            System.out.println("Add code to add to existing excel sheet");
+            BishopList bishopList = Sort.findAttributes();
+            ExcelCompare fileCompare = new ExcelCompare(file);
+            System.out.println("Made it passed check 1");
+            fileCompare.compareAndWrite(fileCompare.cloneSheet(),bishopList );
+            System.out.println("Made it passed check 2");
+            fileCompare.fileClose();
+            System.out.println("Made it passed check 3");
+            System.out.println("The number of changes was: " + fileCompare.getChanges());
+            return;
         }
 
         //Neither cases happened
         else {
-            AlertBox.display("Error","Please choose a file or check box before continuing.");
+            AlertBox.alertDisplay("Error","Please choose a file or check box before continuing.");
         }
     }
 

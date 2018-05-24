@@ -24,40 +24,6 @@ public class ExcelWrite extends Task {
 
 
     /**
-     * Creates a new excel file that contains the data sorted from the website
-     *
-     * @param fileName The name that you wish the file to be named
-     */
-/*
-    public static int newExcelDocument(String fileName) {
-        workbook = new XSSFWorkbook();
-        sheet = workbook.createSheet(getDate());
-
-        //Run the sort function to get the bishopList
-        try {
-            bishopList = Sort.findAttributes();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //addColHeaders(0);
-        addHeadres();
-        addData();
-        try {
-            FileOutputStream out = new FileOutputStream(new File("fileName" + ".xlsx"));
-            workbook.write(out);
-            out.close();
-            System.out.println("Excel Written Sucessfully");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return 1;
-    }
-*/
-
-    /**
      * Gets the current date
      * @return A string in the format dd/mm/yyyy
      */
@@ -69,7 +35,7 @@ public class ExcelWrite extends Task {
     /**
      * Adds the column headers to the sheet. They will be placed at the first row of the sheet
      */
-    private static void addHeadres() {
+    private static void addHeaders() {
         //Set the font for the headers
         XSSFCellStyle headerStyle = workbook.createCellStyle();
         XSSFFont headerFont = workbook.createFont();
@@ -134,7 +100,7 @@ public class ExcelWrite extends Task {
                         cell5.setCellValue(bishop.getSuffix());
                         break;
 
-                    case "Target":
+                    case "Diocese Name":
                         Cell cell6 = dataRow.createCell(cell.getColumnIndex());
                         cell6.setCellValue(bishop.getDioceseName());
                         break;
@@ -190,11 +156,15 @@ public class ExcelWrite extends Task {
 
     }
 
+    /**
+     * Builds the excel sheet from scratch
+     * @return returns done when the program has finished
+     * @throws Exception If the bishopList can not be created
+     */
     @Override
     protected Object call() throws Exception {
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet(getDate());
-        System.out.println("Here");
         //Run the sort function to get the bishopList
         try {
             bishopList = Sort.findAttributes();
@@ -202,11 +172,8 @@ public class ExcelWrite extends Task {
             e.printStackTrace();
         }
 
-        //addColHeaders(0);
-        addHeadres();
+        addHeaders();
         addData();
-        System.out.println("Here2");
-
         try {
             FileOutputStream out = new FileOutputStream(new File("fileName" + ".xlsx"));
             workbook.write(out);
@@ -217,7 +184,7 @@ public class ExcelWrite extends Task {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.updateProgress(100,100);
         return "done";
-
     }
 }

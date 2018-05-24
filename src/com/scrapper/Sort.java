@@ -158,7 +158,7 @@ public class Sort {
                             suffixList.add(nameString[3].trim());
                         } else if (list1.contains(nameString[2])){
                             firstNameList.add(nameString[0].trim());
-                            middleNameList.add(null);
+                            middleNameList.add("");
                             lastNameList.add(nameString[1].trim());
                             suffixList.add(nameString[2].trim());
                         } else if (list1.contains(nameString[3])) {
@@ -171,19 +171,19 @@ public class Sort {
                             firstNameList.add(nameString[0].trim());
                             middleNameList.add(nameString[1].trim());
                             lastNameList.add(nameString[2].trim() + " " + nameString[3].trim());
-                            suffixList.add(null);
+                            suffixList.add("");
                         }
 
                     } else if (nameString.length == 3) {
                         if(suffixs.contains(nameString[nameString.length -1])) {
                             firstNameList.add(nameString[0].trim());
-                            middleNameList.add(null);
+                            middleNameList.add("");
                             lastNameList.add(nameString[1].trim());
                             suffixList.add(nameString[2].trim());
 
                         } else if (list1.contains(nameString[2])){
                             firstNameList.add(nameString[0].trim());
-                            middleNameList.add(null);
+                            middleNameList.add("");
                             lastNameList.add(nameString[1].trim());
                             suffixList.add(nameString[2].trim());
                         }
@@ -195,7 +195,7 @@ public class Sort {
                         }
                     } else if (nameString.length == 2) {
                         firstNameList.add(nameString[0].trim());
-                        middleNameList.add(null);
+                        middleNameList.add("");
                         lastNameList.add(nameString[1].trim());
                         suffixList.add(null);
                     }
