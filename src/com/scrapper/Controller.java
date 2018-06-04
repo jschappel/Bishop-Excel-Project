@@ -26,6 +26,7 @@ public class Controller {
     public Button runButton;
     public VBox vbox;
     public ProgressBar pIndicator;
+    public Stage primStage;
 
     public void chooseFile(){
         FileChooser fc = new FileChooser();
@@ -71,12 +72,13 @@ public class Controller {
 
     public void runProgram() throws IOException, NoSuchMethodException {
 
+        primStage = (Stage) runButton.getScene().getWindow();
+
         //check to see if the radio button was pressed and not "choose file"
         if(wasSelected == false && radioChoice.isSelected()) {
             excelWrite = new ExcelWrite();
             pIndicator.progressProperty().unbind();
             pIndicator.progressProperty().bind(excelWrite.progressProperty());
-
             new Thread(excelWrite).start();
         }
         // If both are selected go with the file
@@ -84,16 +86,13 @@ public class Controller {
             System.out.println("Add code to add to existing excel sheet");
         }
         // If just the "choose file" option happened
-        else if(wasSelected == true && !radioChoice.isSelected()){
+        else if(wasSelected == true && !radioChoice.isSelected()) {
             BishopList bishopList = Sort.findAttributes();
             ExcelCompare fileCompare = new ExcelCompare(file);
-            System.out.println("Made it passed check 1");
             fileCompare.compareAndWrite(fileCompare.cloneSheet(),bishopList );
-            System.out.println("Made it passed check 2");
             fileCompare.fileClose();
-            System.out.println("Made it passed check 3");
-            System.out.println("The number of changes was: " + fileCompare.getChanges());
-            return;
+            AlertBox.finishedchanges(fileCompare.getChanges());
+            primStage.close();
         }
 
         //Neither cases happened
@@ -101,11 +100,4 @@ public class Controller {
             AlertBox.alertDisplay("Error","Please choose a file or check box before continuing.");
         }
     }
-
-    public void displayInstructions(){
-
-
-    }
-
-
 }

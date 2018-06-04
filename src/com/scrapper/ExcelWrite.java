@@ -15,6 +15,7 @@ public class ExcelWrite extends Task {
     private static BishopList bishopList = new BishopList();
     private static XSSFSheet sheet;
     private static XSSFWorkbook workbook;
+    private Boolean finished = false;
 
 
     private static final String[] TITLE_LIST =
@@ -178,7 +179,6 @@ public class ExcelWrite extends Task {
             FileOutputStream out = new FileOutputStream(new File("fileName" + ".xlsx"));
             workbook.write(out);
             out.close();
-            System.out.println("Excel Written Sucessfully");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -186,5 +186,9 @@ public class ExcelWrite extends Task {
         }
         this.updateProgress(100,100);
         return "done";
+    }
+
+    public boolean getStatus(){
+        return finished;
     }
 }

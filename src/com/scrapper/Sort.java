@@ -83,7 +83,7 @@ public class Sort {
         if (indexOfZipHolder >= 0)
             zipCode = html.substring(indexOfZipHolder + 6, html.indexOf("<a") - 3);
         else {
-            zipCode = null;
+            zipCode = "";
         }
      //   System.out.println(zipCode);
 
@@ -97,7 +97,7 @@ public class Sort {
             int cityIndex = newString.lastIndexOf("|");
             int stateComma = newString.lastIndexOf(",");
             address1 = newString.substring(0, cityIndex);
-            address2 = null;
+            address2 = "";
             city = newString.substring(cityIndex + 1, stateComma);
         } else {
             int lastCityIndex = newString.lastIndexOf("|");
@@ -191,13 +191,13 @@ public class Sort {
                             firstNameList.add(nameString[0].trim());
                             middleNameList.add(nameString[1].trim());
                             lastNameList.add(nameString[2].trim());
-                            suffixList.add(null);
+                            suffixList.add("");
                         }
                     } else if (nameString.length == 2) {
                         firstNameList.add(nameString[0].trim());
                         middleNameList.add("");
                         lastNameList.add(nameString[1].trim());
-                        suffixList.add(null);
+                        suffixList.add("");
                     }
                 }
             } else {

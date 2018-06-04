@@ -1,9 +1,6 @@
 package com.scrapper;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
@@ -18,7 +15,6 @@ public class ExcelCompare {
     private final File FILE;
     private final XSSFWorkbook WORKBOOK;
     private final XSSFSheet ORIGINAL_SHEET;
-
     private int changes;
 
     /**
@@ -29,10 +25,9 @@ public class ExcelCompare {
      */
     protected  ExcelCompare(File file) throws IOException {
         this.FILE = file;
-        this.ORIGINAL_SHEET = getLastSheet();
         this.changes = 0;
-        WORKBOOK = new XSSFWorkbook(new FileInputStream(file));
-
+        WORKBOOK = new XSSFWorkbook(new FileInputStream(FILE));
+        this.ORIGINAL_SHEET = getLastSheet();
     }
 
     /**
@@ -45,7 +40,7 @@ public class ExcelCompare {
         this.FILE = file;
         this.ORIGINAL_SHEET = sheet;
         this.changes = 0;
-        WORKBOOK = new XSSFWorkbook(new FileInputStream(file));
+        WORKBOOK = new XSSFWorkbook(new FileInputStream(FILE));
     }
 
     /**
@@ -54,6 +49,7 @@ public class ExcelCompare {
      */
     private XSSFSheet getLastSheet(){
         int numberOfSheets = WORKBOOK.getNumberOfSheets();
+        System.out.println(WORKBOOK.getNumberOfSheets());
         if(numberOfSheets == 0)
             return null;
         else
@@ -107,22 +103,81 @@ public class ExcelCompare {
                 switch (value) {
 
                     case "Last":
-                        Cell dataCell = dataRow.getCell(cell.getColumnIndex());
+                        Cell dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                         compare(dataCell.getStringCellValue(), bishop.getLast(), dataCell);
                         break;
 
                     case "First":
-                        dataCell = dataRow.getCell(cell.getColumnIndex());
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                         compare(dataCell.getStringCellValue(), bishop.getFirst(), dataCell);
                         break;
 
-                    /*case "Middle":
-                        dataCell = dataRow.getCell(cell.getColumnIndex());
-                        System.out.println(dataCell.getStringCellValue());
-
+                    case "Middle":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                         compare(dataCell.getStringCellValue(), bishop.getMiddle(), dataCell);
                         break;
-                    */
+
+                    case "Diocese":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getDioShortName(), dataCell);
+                        break;
+
+                    case "Suffix":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(),bishop.getSuffix(),dataCell);
+                        break;
+
+                    case "Diocese Name":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getDioceseName(), dataCell);
+                        break;
+
+                    case "Sal":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getSal(), dataCell);
+                        break;
+
+                    case "City":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getCity(), dataCell);
+                        break;
+
+                    case "Title":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getTitle(), dataCell);
+                        break;
+
+                    case "State":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getState(), dataCell);
+                        break;
+
+                    case "Zip":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+                        if(dataCell.getCellTypeEnum() == CellType.NUMERIC ){
+                            String data = String.valueOf((int) dataCell.getNumericCellValue());
+                            compare(data, bishop.getZip(), dataCell);
+                        }
+                        else {
+                            compare(dataCell.getStringCellValue(), bishop.getZip(), dataCell);
+                        }
+                        break;
+
+                    case "Inside Sal":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getInsideSal(), dataCell);
+                        break;
+
+                    case "Address 1":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getAddress1(), dataCell);
+                        break;
+
+                    case "Address 2":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getAddress2(), dataCell);
+                        break;
                 }
             }
         }
