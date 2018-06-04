@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -31,16 +32,17 @@ public class ExcelCompare {
     }
 
     /**
-     * Constructor for creating a Compare Object when given a file and a sheet
+     * Constructor for creating a Compare Object when given a file and a sheet.
+     * Use this constructor when you wish to compare a specific sheet
      * @param file A file that you would like to compare to the updated data
-     * @param sheet A sheet in the that you would like to compare
-     * @throws IOException If the file can not be found
+     * @param sheetName A string that is the name of the sheet
+     * @throws IOException If the FileInputStream could not be created
      */
-    protected ExcelCompare(File file, XSSFSheet sheet) throws IOException {
+    protected ExcelCompare(File file, String sheetName) throws IOException {
         this.FILE = file;
-        this.ORIGINAL_SHEET = sheet;
         this.changes = 0;
         WORKBOOK = new XSSFWorkbook(new FileInputStream(FILE));
+        this.ORIGINAL_SHEET = WORKBOOK.getSheet(sheetName);
     }
 
     /**
@@ -49,7 +51,6 @@ public class ExcelCompare {
      */
     private XSSFSheet getLastSheet(){
         int numberOfSheets = WORKBOOK.getNumberOfSheets();
-        System.out.println(WORKBOOK.getNumberOfSheets());
         if(numberOfSheets == 0)
             return null;
         else
@@ -58,7 +59,8 @@ public class ExcelCompare {
     }
 
     /**
-     * Copies the ORIGINAL_SHEET and adds it to a news sheet
+     * Copies the ORIGINAL_SHEET and adds it to a new sheet. I the sheet already exists
+     * it uses the same name but adds (1) after. This will go in for infinite sheets
      */
     protected XSSFSheet cloneSheet(){
         String newSheetName = getDate();
@@ -66,7 +68,7 @@ public class ExcelCompare {
         // Make sure that the sheet name does not already exist
         while(WORKBOOK.getSheet(newSheetName) != null){
             newSheetName = getDate() + "(" + index + ")";
-
+            index++;
         }
         return WORKBOOK.cloneSheet(WORKBOOK.getSheetIndex(ORIGINAL_SHEET),newSheetName);
     }
@@ -84,14 +86,12 @@ public class ExcelCompare {
      * Compares a sheet to a given sheet and then edits the sheet with the changes if there are any
      * @param aSheet a XSSFSheet
      * @param bList a BishopList
-     * @throws IOException if the BishopList could not be created
      */
-    protected void compareAndWrite (XSSFSheet aSheet, BishopList bList) throws IOException, NoSuchMethodException {
+    protected void compareAndWrite (XSSFSheet aSheet, BishopList bList) {
 
         // Find the row headers
         Row dataRow;
         int i = 1;
-        int j = 0;
         Row headerRow = aSheet.getRow(0);
 
         for(Bishop bishop : bList) {
@@ -233,5 +233,23 @@ public class ExcelCompare {
      */
     protected int getChanges(){
         return changes;
+    }
+
+    /**
+     * Returns the names of the sheets in a file
+     * @param file a Excel file with xlsx ext
+     * @return A ArrayList of type String
+     * @throws IOException if InputStream can not be created with the file
+     */
+    protected static ArrayList<String> getSheets(File file) throws IOException {
+        ArrayList<String> sheetList = new ArrayList<>();
+        sheetList.add("Default");
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(file));
+        int numberOfSheets = workbook.getNumberOfSheets();
+
+        for(int i = 0; i < numberOfSheets; i++){
+            sheetList.add(workbook.getSheetAt(i).getSheetName());
+        }
+        return sheetList;
     }
 }

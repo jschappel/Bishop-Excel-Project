@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
-public class ExcelWrite extends Task {
+public class ExcelWrite {
 
     private static BishopList bishopList = new BishopList();
     private static XSSFSheet sheet;
@@ -157,13 +157,19 @@ public class ExcelWrite extends Task {
 
     }
 
+
+
+
     /**
      * Builds the excel sheet from scratch
      * @return returns done when the program has finished
      * @throws Exception If the bishopList can not be created
      */
-    @Override
-    protected Object call() throws Exception {
+
+
+
+    public void run(File file) throws IOException {
+        System.out.println("File Path: " + file.getAbsolutePath());
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet(getDate());
         //Run the sort function to get the bishopList
@@ -175,20 +181,16 @@ public class ExcelWrite extends Task {
 
         addHeaders();
         addData();
+
         try {
-            FileOutputStream out = new FileOutputStream(new File("fileName" + ".xlsx"));
+            System.out.println("here");
+            FileOutputStream out = new FileOutputStream(file.getAbsolutePath());
+            System.out.println("here pt2");
             workbook.write(out);
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.updateProgress(100,100);
-        return "done";
-    }
 
-    public boolean getStatus(){
-        return finished;
+        }
     }
 }
