@@ -45,7 +45,6 @@ public class AlertBox {
 
         window.setScene(scene);
         window.showAndWait();
-
     }
 
     /**
@@ -62,7 +61,7 @@ public class AlertBox {
         window.setMinWidth(350);
         window.setMinHeight(90);
 
-        Label label = new Label("Would you like to Specify the excel sheet you would like to compare? If left blank the program will use the last sheet in the Excel file");
+        Label label = new Label("Would you like to Specify the excel sheet you would like to compare? Default option will use the last sheet in the Excel file");
         label.setWrapText(true);
 
         ChoiceBox<String> choiceBox = new ChoiceBox<>();

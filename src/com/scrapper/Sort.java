@@ -85,7 +85,6 @@ public class Sort {
         else {
             zipCode = "";
         }
-     //   System.out.println(zipCode);
 
         String newString = html;
         if (indexOfUrl >= 0)
@@ -243,7 +242,6 @@ public class Sort {
 
             Elements testele = element.select("tr[valign=top]");
             for (Element ele : testele) {
-                //System.out.println("\n");
 
                 // Address1, address2, city, zip, website
                 Element ele2 = ele.select("td[style=padding-left:30px!important; margin-top:0px!important;font-size:11px!important;color:#555!important;]").first();
@@ -256,7 +254,6 @@ public class Sort {
                 for(int index2 = 0; index2 < firstNameList.size(); index2++) {
                     Bishop bishop = new Bishop("TODO",firstNameList.get(index2),middleNameList.get(index2),lastNameList.get(index2),suffixList.get(index2),titleList.get(index2),"TODO",dioShortNameList.get(index), dioceseArray.get(index),address1,address2,city,state,zipCode);
                     bishopList.add(bishop);
-                    //System.out.println(bishop.getBishopLastName());
                 }
 
                 firstNameList.clear();
@@ -287,7 +284,13 @@ public class Sort {
     }
 
 
-
+    /**
+     * Counts the number of occurrences of a character in a string
+     * @param someString A string you would like to compare
+     * @param searchedChar A character you would like to search for
+     * @param index The location in the string you would like to start comparing at
+     * @return The number of times "searchChar" occurs in "someString". Of type string
+     */
     private static int countOccurrences(
             String someString, char searchedChar, int index) {
         if (index >= someString.length()) {

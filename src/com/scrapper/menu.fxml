@@ -26,7 +26,7 @@
       </MenuBar>
       <HBox spacing="20.0">
          <children>
-            <Label prefHeight="103.0" prefWidth="237.0" text="Welcome to Bishop Finder. To get started choose a file to get started or press create new." wrapText="true" />
+            <Label prefHeight="103.0" prefWidth="237.0" text='Welcome to Bishop Finder. To get started press "Choose File" or check the box "Create new document" then press run.' wrapText="true" />
             <Region />
             <ImageView pickOnBounds="true" preserveRatio="true">
                <image>

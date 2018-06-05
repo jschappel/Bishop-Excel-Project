@@ -53,9 +53,6 @@ public class ExcelWrite {
             Cell cell = headerRow.createCell(cellid++); // Create a new Cell in the current row
             cell.setCellValue(title); // Set the value to new value
             cell.setCellStyle(headerStyle);
-            //System.out.println(cell.getStringCellValue());
-
-
         }
     }
 
@@ -157,19 +154,12 @@ public class ExcelWrite {
 
     }
 
-
-
-
     /**
-     * Builds the excel sheet from scratch
-     * @return returns done when the program has finished
-     * @throws Exception If the bishopList can not be created
+     * Creates the excel file
+     * @param file a excel file
+     * @throws IOException if fileOutputStream can not be created
      */
-
-
-
     public void run(File file) throws IOException {
-        System.out.println("File Path: " + file.getAbsolutePath());
         workbook = new XSSFWorkbook();
         sheet = workbook.createSheet(getDate());
         //Run the sort function to get the bishopList
@@ -183,9 +173,7 @@ public class ExcelWrite {
         addData();
 
         try {
-            System.out.println("here");
             FileOutputStream out = new FileOutputStream(file.getAbsolutePath());
-            System.out.println("here pt2");
             workbook.write(out);
             out.close();
         } catch (FileNotFoundException e) {

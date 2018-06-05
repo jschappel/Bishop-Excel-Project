@@ -1,6 +1,7 @@
 package com.scrapper;
 
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -34,7 +35,6 @@ public class Controller {
         if (file != null){
             wasSelected = true;
             progressID.setText("File was successfully loaded");
-            System.out.println("File Success");
 
         }
     }
@@ -80,6 +80,7 @@ public class Controller {
 
                     updateMessage("Please wait (Many take a moment)");
                     ExcelWrite excelWrite = new ExcelWrite();
+                    updateMessage("Please wait (Creating new Excel file)");
                     excelWrite.run(file);
                     return null;
                 }
@@ -103,7 +104,6 @@ public class Controller {
             ArrayList<String> sheetList = ExcelCompare.getSheets(file);
             AlertBox box = new AlertBox();
             box.sheetDisplay("Advanced Options",sheetList);
-            System.out.print(box.getSheet());
 
             Task <Void> task = new Task<Void>() {
 
@@ -145,17 +145,6 @@ public class Controller {
                 runButton.setDisable(false);
             });
         }
-
-            /*
-
-            BishopList bishopList = Sort.findAttributes();
-            ExcelCompare fileCompare = new ExcelCompare(file);
-            fileCompare.compareAndWrite(fileCompare.cloneSheet(),bishopList );
-            fileCompare.fileClose();
-            AlertBox.finishedchanges(fileCompare.getChanges());
-
-            */
-            //primStage.close();
 
         //Neither cases happened
         else {
