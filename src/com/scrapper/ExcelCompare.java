@@ -184,6 +184,82 @@ public class ExcelCompare {
     }
 
     /**
+     * Compares a sheet to a given sheet and then edits the sheet with the changes if there are any
+     * @param aSheet a XSSFSheet
+     * @param bList a BishopList
+     */
+    protected void compareAndWrite_salesforce (XSSFSheet aSheet, BishopList bList) {
+
+        // Find the row headers
+        Row dataRow;
+        int i = 1;
+        Row headerRow = aSheet.getRow(0);
+
+        for(Bishop bishop : bList) {
+            dataRow  = aSheet.getRow(i++);
+            Iterator<Cell> cellIterator = headerRow.cellIterator();
+            while (cellIterator.hasNext()) {
+                Cell cell = cellIterator.next();
+                String value = cell.getStringCellValue();
+                switch (value) {
+
+                    case "Last Name":
+                        Cell dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getLast(), dataCell);
+                        break;
+
+                    case "First Name":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getFirst(), dataCell);
+                        break;
+
+                    case "Account":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getDioceseName(), dataCell);
+                        break;
+
+                    case "Billing City":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getCity(), dataCell);
+                        break;
+
+                    case "Title":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getTitle(), dataCell);
+                        break;
+
+                    case "Billing State/Province":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getState(), dataCell);
+                        break;
+
+                    case "Billing Zip/Postal Code":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+
+                        if(dataCell.getCellTypeEnum() == CellType.NUMERIC ){
+                            String data = String.valueOf((int) dataCell.getNumericCellValue());
+                            compare(data, bishop.getZip(), dataCell);
+                        }
+                        else {
+                            compare(dataCell.getStringCellValue(), bishop.getZip(), dataCell);
+                        }
+                        break;
+
+                    case "Billing Address Line 1":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getAddress1(), dataCell);
+                        break;
+
+                    case "Billing Address Line 2":
+                        dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        compare(dataCell.getStringCellValue(), bishop.getAddress2(), dataCell);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
      * Compares two values. If the values are different then the cell is highlighted and the
      * new value is colored red. The format is as follows: "oldValue | newValue"
      * @param currentValue The value that is currently in the cell

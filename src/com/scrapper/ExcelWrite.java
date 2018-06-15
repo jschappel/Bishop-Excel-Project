@@ -1,6 +1,5 @@
 package com.scrapper;
 
-import javafx.concurrent.Task;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 
@@ -21,7 +20,7 @@ public class ExcelWrite {
     private static final String[] TITLE_LIST =
             {"new bishop", "Ordinary", "Current RI Diocese", "Target", "Primary Contact", "Special Note", "Diocese",
                     "sal", "First", "Middle", "Last", "Suffix", "Title", "Inside Sal", "Diocese Name",
-                    "Address 1", "Address 2", "City", "State", "Zip", "USCCB Notes"};
+                    "Address 1", "Address 2", "City", "State", "Zip", "USCCB Notes", "Lotus Codes"};
 
 
     /**
@@ -142,8 +141,11 @@ public class ExcelWrite {
                         Cell cell14 = dataRow.createCell(cell.getColumnIndex());
                         cell14.setCellValue(bishop.getAddress2());
                         break;
-                }
 
+                    case "Lotus Codes":
+                        Cell cell15 = dataRow.createCell(cell.getColumnIndex());
+                        cell15.setCellValue(bishop.getLotusCode());
+                }
             }
         }
         // AutoSize all of the columns now that all the data is in
@@ -178,7 +180,6 @@ public class ExcelWrite {
             out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-
         }
     }
 }

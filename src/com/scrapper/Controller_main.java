@@ -1,15 +1,26 @@
 package com.scrapper;
 
 import javafx.concurrent.Task;
-import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.awt.*;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class Controller {
+public class Controller_main {
 
     public File file;
     public Boolean wasSelected = false;
@@ -19,8 +30,9 @@ public class Controller {
     public Button fileButton;
     public Button runButton;
     public VBox vbox;
-    public Stage primStage;
     public Label progressID;
+    public MenuItem main_salesforce;
+    public MenuBar menu_bar;
 
     /**
      * Opens a user specified file
@@ -35,7 +47,7 @@ public class Controller {
         if (file != null){
             wasSelected = true;
             progressID.setText("File was successfully loaded");
-
+            progressID.setTextFill(Color.valueOf("#01C76C"));
         }
     }
 
@@ -63,9 +75,8 @@ public class Controller {
      * in the file
      * @throws NoSuchMethodException when dealing with the excelCompare
      */
-    public void runProgram() throws IOException, NoSuchMethodException {
+    public void runProgram() throws IOException {
 
-       // primStage = (Stage) runButton.getScene().getWindow();
 
         //check to see if the radio button was pressed and not "choose file"
         if(!wasSelected && radioChoice.isSelected()) {
@@ -103,7 +114,7 @@ public class Controller {
 
             ArrayList<String> sheetList = ExcelCompare.getSheets(file);
             AlertBox box = new AlertBox();
-            box.sheetDisplay("Advanced Options",sheetList);
+            box.sheetDisplay("Advanced Options",sheetList,"RenewStyle.css");
 
             Task <Void> task = new Task<Void>() {
 
@@ -148,22 +159,30 @@ public class Controller {
 
         //Neither cases happened
         else {
-            AlertBox.alertDisplay("Error","Please choose a file or check box before continuing.");
+            AlertBox.alertDisplay("Error","Please choose a file or check box before continuing.","RenewStyle.css");
         }
     }
 
+    /**
+     * Handles switch to the Salesforce UI
+     * @throws IOException if te FXMLLoader can not get the salesforce_menu resource file
+     */
+    public void chooseProgram() throws IOException {
+        Stage primStage = (Stage) menu_bar.getScene().getWindow();
+        Parent salesforceScene = FXMLLoader.load(getClass().getResource("Salesforce_menu.fxml"));
+        Scene scene = new Scene(salesforceScene);
+        scene.getStylesheets().add("SalesforceStyle.css");
+        primStage.setScene(scene);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * Opens the U.S.C.C.B website when called
+     */
+    public void openWeb() {
+        try {
+            Desktop.getDesktop().browse(new URI("http://www.usccb.org/about/bishops-and-dioceses/all-dioceses.cfm"));
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
 }

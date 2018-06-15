@@ -22,7 +22,7 @@ public class AlertBox {
      * @param title The title of the window
      * @param message The alert message that you would like to display
      */
-    public static void alertDisplay(String title, String message) {
+    public static void alertDisplay(String title, String message,String cssStyle) {
         Stage window = new Stage();
 
 
@@ -41,7 +41,7 @@ public class AlertBox {
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add("RenewStyle.css");
+        scene.getStylesheets().add(cssStyle);
 
         window.setScene(scene);
         window.showAndWait();
@@ -52,7 +52,7 @@ public class AlertBox {
      * @param title The title of the alert window
      * @param sheetList An ArrayList of type string that contains all of the excel file sheet names
      */
-    public void sheetDisplay(String title, ArrayList<String> sheetList) {
+    public void sheetDisplay(String title, ArrayList<String> sheetList, String cssStyle) {
         Stage window = new Stage();
 
 
@@ -65,6 +65,9 @@ public class AlertBox {
         label.setWrapText(true);
 
         ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.setPrefHeight(20);
+        choiceBox.setMaxHeight(20);
+
         for(String name : sheetList)
             choiceBox.getItems().add(name);
 
@@ -84,7 +87,7 @@ public class AlertBox {
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout);
-        scene.getStylesheets().add("RenewStyle.css");
+        scene.getStylesheets().add(cssStyle);
 
         window.setScene(scene);
         window.showAndWait();

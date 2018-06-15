@@ -4,9 +4,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 
 /**
@@ -23,6 +25,7 @@ public class Sort {
     private static ArrayList<String> stateList = new ArrayList<>();
     private static ArrayList<String> suffixList = new ArrayList<>();
     private static ArrayList<String> dioShortNameList = new ArrayList<>();
+    private static Map<String, String> lotusMap = new HashMap<>();
 
     private static BishopList bishopList = new BishopList();
 
@@ -41,7 +44,7 @@ public class Sort {
     /**
      * Adds all of the diocese names to an array list
      * @param elements Location of where there the Bishops are in the webpage
-     * @param list An empty arraylist to add all of the Diocese names to
+     * @param list An empty arrayList to add all of the Diocese names to
      * @param shortList An empty list to add the shortened Diocese names to
      * @return a list will all of the bishop names
      */
@@ -116,6 +119,43 @@ public class Sort {
         }
         Elements site = element.select("a.subtle");
         website = site.text().trim();
+    }
+
+
+    /**
+     * Puts all the lotus codes into a map when given a file.
+     * The key for the map is the diocese name and the value is the code.
+     * @param file a File that contains the lotus codes for each Diocese.
+     * @throws FileNotFoundException If the file can not be found or opened.
+     */
+    private static void addLotusCodes(File file) throws FileNotFoundException {
+        Scanner lineScanner = new Scanner(file);
+        boolean firstItem = false;
+        while(lineScanner.hasNextLine()) {
+            Scanner wordScanner = new Scanner(lineScanner.nextLine());
+            wordScanner.useDelimiter("/");
+            int index = 0;
+            String key = "";
+            while(wordScanner.hasNext()) {
+                if (index == 1){
+                    String value = wordScanner.next();
+                    lotusMap.put(key,value);
+                    index = 0;
+                }
+                else {
+                    if(firstItem){
+                        key = wordScanner.next();
+                        index++;
+                    }
+                    else {
+                        key = wordScanner.next().substring(1);
+                        System.out.println(key);
+                        firstItem = true;
+                        index++;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -251,6 +291,7 @@ public class Sort {
                 Element e = ele.select("td.personnel").first();
                 bishopNames(e);
 
+                // Create the bishop objects
                 for(int index2 = 0; index2 < firstNameList.size(); index2++) {
                     Bishop bishop = new Bishop("TODO",firstNameList.get(index2),middleNameList.get(index2),lastNameList.get(index2),suffixList.get(index2),titleList.get(index2),"TODO",dioShortNameList.get(index), dioceseArray.get(index),address1,address2,city,state,zipCode);
                     bishopList.add(bishop);
@@ -263,8 +304,19 @@ public class Sort {
                 titleList.clear();
                 index++;
             }
-
         }
+
+        // Add the lotusCodes
+        addLotusCodes(new File("US Diocese Lotus Codes.txt"));
+        for (Bishop bishop : bishopList){
+            if(lotusMap.containsKey(bishop.getDioceseName())){
+                bishop.addLotusCode(lotusMap.get(bishop.getDioceseName()));
+            }
+            else {
+                System.out.println(bishop.getDioceseName() + ", does not a associated Lotus Code.");
+            }
+        }
+
         return bishopList;
     }
 

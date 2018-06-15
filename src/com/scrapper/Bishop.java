@@ -22,6 +22,7 @@ public class Bishop {
     private String state;
     private String zip;
     private String dioShortName;
+    private String lotusCode;
 
 
     /**
@@ -57,6 +58,15 @@ public class Bishop {
         this.state = state;
         this.zip = zip;
         this.dioShortName = dioShortName;
+        this.lotusCode = null;
+    }
+
+    /**
+     * Adds a lotus code to a diocese
+     * @param lotusCode A lotusCode that is of type Stirng
+     */
+    protected void addLotusCode(String lotusCode){
+        this.lotusCode = lotusCode;
     }
 
     /**
@@ -170,5 +180,13 @@ public class Bishop {
      */
     protected String getSuffix(){
         return this.suffix;
+    }
+
+    /**
+     * Returns the Lotus Code that is associated with a Diocese
+     * @return of type String
+     */
+    protected String getLotusCode(){
+        return this.lotusCode;
     }
 }

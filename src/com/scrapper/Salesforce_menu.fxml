@@ -7,13 +7,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox id="Vbox" fx:id="vbox" prefHeight="299.0" prefWidth="411.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scrapper.Controller_main">
+<VBox id="Vbox" fx:id="vbox" prefHeight="299.0" prefWidth="411.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.scrapper.Controller_salesforce">
     <children>
-        <MenuBar fx:id="menu_bar">
+        <MenuBar id="menuBar" fx:id="menuBar">
             <menus>
                 <Menu mnemonicParsing="false" text="Program">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="SalesForce" fx:id="main_salesforce" onAction="#chooseProgram" />
+                        <MenuItem fx:id="renew_salesforce" mnemonicParsing="false" onAction="#chooseProgram" text="SalesForce" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -26,11 +26,10 @@
         </MenuBar>
         <HBox spacing="20.0">
             <children>
-                <Label prefHeight="103.0" prefWidth="237.0" text='Welcome to Bishop Finder. To get started press "Choose File" or check the box "Create new document" then press run.' wrapText="true" />
-                <Region />
+                <Label prefHeight="103.0" prefWidth="237.0" text="To get started press &quot;Choose File&quot; and select your file selected from Salesforce." wrapText="true" />
                 <ImageView pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@/resources/images/RenewTree.png" />
+                        <Image url="@/resources/images/Salesforce_logo.png" />
                     </image>
                 </ImageView>
             </children>
@@ -41,35 +40,29 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
         </HBox>
-        <HBox alignment="CENTER_LEFT">
-            <children>
-                <Button fx:id="fileButton" mnemonicParsing="false" onAction="#chooseFile" text="Choose File" />
-                <Region prefHeight="27.0" prefWidth="68.0" />
-                <RadioButton fx:id="radioChoice" mnemonicParsing="false" text="Create new document">
-                    <padding>
-                        <Insets top="3.0" />
-                    </padding>
-                </RadioButton>
-            </children>
+        <HBox alignment="TOP_CENTER">
             <VBox.margin>
                 <Insets bottom="8.0" left="8.0" right="8.0" />
             </VBox.margin>
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
+            <children>
+                <Label fx:id="status" />
+            </children>
         </HBox>
-        <HBox alignment="CENTER_LEFT" prefHeight="89.0" prefWidth="360.0">
-            <children>
-                <Button fx:id="runButton" mnemonicParsing="false" onAction="#runProgram" prefHeight="27.0" prefWidth="93.0" text="Run" />
-                <Region prefHeight="27.0" prefWidth="58.0" />
-                <Label id="progressID" fx:id="progressID"/>
-            </children>
+        <HBox alignment="CENTER" prefHeight="89.0" prefWidth="360.0">
             <VBox.margin>
                 <Insets bottom="8.0" left="8.0" right="8.0" />
             </VBox.margin>
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
+            <children>
+                <Button fx:id="fileButton" mnemonicParsing="false" text="Choose File" onAction="#chooseFile" />
+                <Region prefHeight="27.0" prefWidth="150.0" />
+                <Button fx:id="runButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="93.0" text="Run" onAction="#runProgram" />
+            </children>
         </HBox>
     </children>
 </VBox>
