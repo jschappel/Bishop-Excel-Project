@@ -20,8 +20,7 @@ public class ExcelWrite {
             "sal", "First", "Middle", "Last", "Suffix", "Title", "Inside Sal", "Diocese Name",
             "Address 1", "Address 2", "City", "State", "Zip", "USCCB Notes", "Lotus Codes"};
 
-
-
+    
     /**
      * Constructor for Excel write:
      *  initializes WORKBOOK, FILE, and sheet
