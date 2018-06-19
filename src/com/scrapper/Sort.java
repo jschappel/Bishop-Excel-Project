@@ -258,14 +258,14 @@ public class Sort {
 
 
     /**
-     * Scrapes through the website and returns a bishopList
-     * @return A BishopList
+     * Scrapes through the website and returns a List of type Bishop
+     * @return A List of type Bishop
      * @throws IOException throws Exception if website is not found
      */
-    protected static BishopList findAttributes() throws IOException {
+    protected static List<Bishop> findAttributes() throws IOException {
         document = Jsoup.connect("http://www.usccb.org/about/bishops-and-dioceses/all-dioceses.cfm").get();
         Elements body = document.select("div#CS_CCF_2203_2211");
-
+        List<Bishop> bishops = new ArrayList<>();
         // get the Diocese names
         dioceseList(body,dioceseArray,dioShortNameList);
         int index = 0;
@@ -294,7 +294,7 @@ public class Sort {
                 // Create the bishop objects
                 for(int index2 = 0; index2 < firstNameList.size(); index2++) {
                     Bishop bishop = new Bishop("TODO",firstNameList.get(index2),middleNameList.get(index2),lastNameList.get(index2),suffixList.get(index2),titleList.get(index2),"TODO",dioShortNameList.get(index), dioceseArray.get(index),address1,address2,city,state,zipCode);
-                    bishopList.add(bishop);
+                    bishops.add(bishop);
                 }
 
                 firstNameList.clear();
@@ -308,7 +308,7 @@ public class Sort {
 
         // Add the lotusCodes
         addLotusCodes(new File("US Diocese Lotus Codes.txt"));
-        for (Bishop bishop : bishopList){
+        for (Bishop bishop : bishops){
             if(lotusMap.containsKey(bishop.getDioceseName())){
                 bishop.addLotusCode(lotusMap.get(bishop.getDioceseName()));
             }
@@ -317,8 +317,9 @@ public class Sort {
             }
         }
 
-        return bishopList;
+        return bishops;
     }
+
 
     /**
      * Determines if the given string is a number

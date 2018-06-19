@@ -1,38 +1,57 @@
 package com.scrapper;
 
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import static com.scrapper.Bishop.*;
+
 
 public class Controller_main {
 
-    public File file;
-    public Boolean wasSelected = false;
+    //  Files
+    private File file;
+    private File saveFile;
 
-    // fxml Buttons
+    //  Booleans
+    private Boolean wasSelected = false;
+    private Boolean saveFileSelected = false;
+
+    //  Views:
+    public VBox vbox;
+
+    // fxml Buttons and Labels:
     public RadioButton radioChoice;
     public Button fileButton;
     public Button runButton;
-    public VBox vbox;
     public Label progressID;
-    public MenuItem main_salesforce;
+
+    //  Menu Related Stuff:
+    public Menu sort_menu;
     public MenuBar menu_bar;
+    public MenuItem current_sort;
+    public MenuItem main_salesforce;
+
+    //  Comparators
+    private Comparator<Bishop> currentCompare_main = COMPARE_BY_BISH_LAST;    // Default compare is by  bishop lastName
 
     /**
      * Opens a user specified file
@@ -52,28 +71,28 @@ public class Controller_main {
     }
 
     /**
-     * Returns a file as a user specified location. This file is not SAVEED
+     * Returns a file as a user specified location. This file is not SAVED
      * Look in ExcelWrite for where the file is saved
      * @return A File at the chosen location
      */
-    private static File directoryChooser() {
-
+    private void directoryChooser() {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Choose location To Save Report");
         chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
-        File selectedFile = null;
-        while(selectedFile== null){
-            selectedFile = chooser.showSaveDialog(null);
+        File selectedFile = chooser.showSaveDialog(null);
+
+        if (selectedFile != null) {
+            saveFile = selectedFile;
+            saveFileSelected = true;
         }
-        File file = new File(String.valueOf(selectedFile));
-        return file;
+        else
+            System.out.println("No File Selected");
     }
 
     /**
      * OnClick action for the "Run Button" This function handles all of the possible run cases.
      * @throws IOException when creating ExcelCompare object if the workbook can not be created
      * in the file
-     * @throws NoSuchMethodException when dealing with the excelCompare
      */
     public void runProgram() throws IOException {
 
@@ -81,32 +100,49 @@ public class Controller_main {
         //check to see if the radio button was pressed and not "choose file"
         if(!wasSelected && radioChoice.isSelected()) {
             runButton.setDisable(true);
+            directoryChooser();
 
-            //File file = directoryChooser();
-            File file = directoryChooser();
+            //  If a save location was selected
+            if (saveFileSelected) {
+                //File file = directoryChooser();
+                System.out.println("here");
+                List<Bishop> bishopList = Sort.findAttributes();
+                bishopList.sort(currentCompare_main);
 
-            Task <Void> task = new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
+                Task<Void> task = new Task<Void>() {
+                    @Override
+                    protected Void call() {
 
-                    updateMessage("Please wait (Many take a moment)");
-                    ExcelWrite excelWrite = new ExcelWrite();
-                    updateMessage("Please wait (Creating new Excel file)");
-                    excelWrite.run(file);
-                    return null;
-                }
-            };
+                        updateMessage("Please wait (Creating excel file)");
+                        ExcelWrite excelWrite = new ExcelWrite(saveFile);
+                        updateMessage("Please wait (Adding headers)");
+                        excelWrite.addHeaders();
+                        updateMessage("Please wait (Adding bishop data)");
+                        excelWrite.addData(bishopList);
+                        updateMessage("Please wait (Closing excel file)");
+                        excelWrite.closeFile();
+                        return null;
+                    }
+                };
+                progressID.setTextFill(Color.BLACK);
+                task.messageProperty().addListener((observable, oldValue, newValue) -> progressID.setText(newValue));
+                new Thread(task).start();
 
-            task.messageProperty().addListener((observable, oldValue, newValue) -> progressID.setText(newValue));
-            new Thread(task).start();
-
-            // java 8 construct, replace with java 7 code if using java 7.
-            task.setOnSucceeded(e -> {
-                progressID.textProperty().unbind();
+                // java 8 construct, replace with java 7 code if using java 7.
+                task.setOnSucceeded(e -> {
+                    progressID.textProperty().unbind();
+                    runButton.setDisable(false);
+                    // this message will be seen.
+                    progressID.setTextFill(Color.valueOf("#01C76C"));
+                    progressID.setText("The file was successfully created");
+                });
+            }
+            else{
                 runButton.setDisable(false);
-                // this message will be seen.
-                progressID.setText("The file was successfully created");
-            });
+                progressID.setTextFill(Color.valueOf("C20004"));
+                progressID.setText("No file was selected");
+
+            }
         }
 
         // If just the "choose file" option happened or both options were pressed
@@ -121,7 +157,10 @@ public class Controller_main {
                 @Override
                 protected Void call() throws Exception {
                     updateMessage("Please wait (Scraping Website)");
-                    BishopList bishopList = Sort.findAttributes();
+
+                    // TODO("Add code for different sorts")
+                    List<Bishop> bishopList = Sort.findAttributes();
+                    bishopList.sort(currentCompare_main);
 
 
                     // See which ExcelCompare constructor we are going to use
@@ -184,5 +223,88 @@ public class Controller_main {
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    @SuppressWarnings("Duplicates")
+    public void changeCurrentOption(ActionEvent actionEvent) {
+        CheckMenuItem item = (CheckMenuItem) actionEvent.getSource();
+        String id = item.getId();
+
+        switch (id){
+            case "full_dio_menu":{
+                setSelected("full_dio_menu");
+                currentCompare_main = COMPARE_BY_DIO_FULL;
+                System.out.println("Now doing Diocese Full Name Comparison");
+                break;
+            }
+
+            case "short_dio_menu":{
+                setSelected("short_dio_menu");
+                currentCompare_main = COMPARE_BY_DIO_SHORT;
+                System.out.println("Now doing Diocese Short Name Comparison");
+                break;
+            }
+
+            case "city_dio_menu":{
+                setSelected("city_dio_menu");
+                currentCompare_main = COMPARE_BY_DIO_CITY;
+                System.out.println("Now doing Diocese City Comparison");
+                break;
+            }
+
+            case "state_dio_menu":{
+                setSelected("state_dio_menu");
+                currentCompare_main = COMPARE_BY_DIO_STATE;
+                System.out.println("Now doing Diocese State Comparison");
+                break;
+            }
+
+            case "first_bish_menu":{
+                setSelected("first_bish_menu");
+                currentCompare_main = COMPARE_BY_BISH_FIRST;
+                System.out.println("Now doing First Comparison");
+                break;
+            }
+
+            case "last_bish_menu":{
+                setSelected("last_bish_menu");
+                currentCompare_main = COMPARE_BY_BISH_LAST;
+                System.out.println("Now doing Last Comparison");
+                break;
+            }
+
+            case "title_bish_menu": {
+                setSelected("title_bish_menu");
+                currentCompare_main = COMPARE_BY_BISH_TITLE;
+                System.out.println("Now doing Title Comparison");
+                break;
+            }
+        }
+    }
+
+    /**
+     * Places a check mark next to the current selected box. Removes the previous mark
+     * @param newSelection the id name of the item you wish to select
+     */
+    @SuppressWarnings("Duplicates")
+    private void setSelected(String newSelection){
+        int outterSize = 2;
+        String currentSelection = "";
+        for(int i = 0; i < outterSize; i++){
+            Menu innerMenu = (Menu) sort_menu.getItems().get(i);
+            int innerSize = innerMenu.getItems().size();
+            for (int j = 0; j < innerSize; j++){
+                CheckMenuItem item = (CheckMenuItem) innerMenu.getItems().get(j);
+                if (item.getId().equals(newSelection)) {
+                    currentSelection = item.getText();
+                    item.setSelected(true);
+                }
+                else
+                    item.setSelected(false);
+            }
+        }
+
+        // Set the text of the current Sort menu item
+        current_sort.setText("Current Sort: " + currentSelection);
     }
 }

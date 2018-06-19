@@ -189,4 +189,25 @@ public class Bishop {
     protected String getLotusCode(){
         return this.lotusCode;
     }
+
+
+//  Comparators Below:
+
+    public static Comparator<Bishop> COMPARE_BY_BISH_LAST = Comparator.comparing(bishop -> bishop.last.toLowerCase());
+
+    public static Comparator<Bishop> COMPARE_BY_BISH_FIRST = Comparator.comparing(bishop -> bishop.first.toLowerCase());
+
+    public static Comparator<Bishop> COMPARE_BY_BISH_TITLE = Comparator.comparing(bishop -> bishop.title.toLowerCase());
+
+    public static Comparator<Bishop> COMPARE_BY_DIO_SHORT = Comparator.comparing(bishop -> bishop.dioShortName.toLowerCase());
+
+    public static Comparator<Bishop> COMPARE_BY_DIO_FULL = Comparator.comparing(bishop -> bishop.dioceseName.toLowerCase());
+
+    public static Comparator<Bishop> COMPARE_BY_DIO_CITY = Comparator.comparing(bishop -> bishop.city.toLowerCase());
+
+    public static Comparator<Bishop> COMPARE_BY_DIO_STATE = Comparator.comparing(bishop -> bishop.state.toLowerCase());
+
+
+
+
 }

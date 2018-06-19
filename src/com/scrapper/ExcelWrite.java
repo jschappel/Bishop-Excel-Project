@@ -2,25 +2,36 @@ package com.scrapper;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
-
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 public class ExcelWrite {
 
-    private static BishopList bishopList = new BishopList();
-    private static XSSFSheet sheet;
-    private static XSSFWorkbook workbook;
-    private Boolean finished = false;
+    private final XSSFWorkbook WORKBOOK;
+    private final File FILE;
+    private XSSFSheet sheet;
+
+    private static final String[] TITLE_LIST = {
+            "new bishop", "Ordinary", "Current RI Diocese", "Target", "Primary Contact", "Special Note", "Diocese",
+            "sal", "First", "Middle", "Last", "Suffix", "Title", "Inside Sal", "Diocese Name",
+            "Address 1", "Address 2", "City", "State", "Zip", "USCCB Notes", "Lotus Codes"};
 
 
-    private static final String[] TITLE_LIST =
-            {"new bishop", "Ordinary", "Current RI Diocese", "Target", "Primary Contact", "Special Note", "Diocese",
-                    "sal", "First", "Middle", "Last", "Suffix", "Title", "Inside Sal", "Diocese Name",
-                    "Address 1", "Address 2", "City", "State", "Zip", "USCCB Notes", "Lotus Codes"};
+
+    /**
+     * Constructor for Excel write:
+     *  initializes WORKBOOK, FILE, and sheet
+     * @param file a non null file
+     */
+    public ExcelWrite(File file) {
+        this.FILE = file;
+        WORKBOOK = new XSSFWorkbook();
+        sheet = WORKBOOK.createSheet(getDate());
+    }
 
 
     /**
@@ -33,12 +44,12 @@ public class ExcelWrite {
     }
 
     /**
-     * Adds the column headers to the sheet. They will be placed at the first row of the sheet
+     * Addes the headers to the excel file
      */
-    private static void addHeaders() {
+    public void addHeaders() {
         //Set the font for the headers
-        XSSFCellStyle headerStyle = workbook.createCellStyle();
-        XSSFFont headerFont = workbook.createFont();
+        XSSFCellStyle headerStyle = WORKBOOK.createCellStyle();
+        XSSFFont headerFont = WORKBOOK.createFont();
         headerFont.setBold(true);
         headerFont.setFontHeight(14);
         headerStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -56,14 +67,14 @@ public class ExcelWrite {
     }
 
     /**
-     * Adds the bishopList elements to th sheet
+     * Adds bishop data to the excel file
+     * @param bishopList a ist of type Bishop
      */
-    private static void addData() {
+    public void addData(List<Bishop> bishopList) {
         Row dataRow;
         int i = 1;
-        Sheet getSheet = workbook.getSheetAt(0);
+        Sheet getSheet = WORKBOOK.getSheetAt(0);
         Row row = getSheet.getRow(0);
-
 
         for (Bishop bishop : bishopList) {
             dataRow = sheet.createRow(i++);
@@ -153,32 +164,16 @@ public class ExcelWrite {
         // it is a slow process.
         for (int j = 0; j < TITLE_LIST.length; j++)
             sheet.autoSizeColumn(j);
-
     }
 
     /**
-     * Creates the excel file
-     * @param file a excel file
-     * @throws IOException if fileOutputStream can not be created
+     * Closes the excel file safely so that the file is not corrupted
      */
-    public void run(File file) throws IOException {
-        workbook = new XSSFWorkbook();
-        sheet = workbook.createSheet(getDate());
-        //Run the sort function to get the bishopList
-        try {
-            bishopList = Sort.findAttributes();
+    public void closeFile(){
+        try (FileOutputStream fos = new FileOutputStream(FILE.getAbsolutePath())) {
+            WORKBOOK.write(fos);
+            fos.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        addHeaders();
-        addData();
-
-        try {
-            FileOutputStream out = new FileOutputStream(file.getAbsolutePath());
-            workbook.write(out);
-            out.close();
-        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

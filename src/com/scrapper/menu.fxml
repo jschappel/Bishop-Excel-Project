@@ -11,22 +11,45 @@
     <children>
         <MenuBar fx:id="menu_bar">
             <menus>
-                <Menu mnemonicParsing="false" text="Program">
+                <Menu mnemonicParsing="false" text="Switch Program">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="SalesForce" fx:id="main_salesforce" onAction="#chooseProgram" />
+                        <MenuItem fx:id="main_salesforce" mnemonicParsing="false" onAction="#chooseProgram" text="SalesForce" />
                     </items>
                 </Menu>
+
+                <Menu fx:id="sort_menu" mnemonicParsing="false" text="Sort By:">
+                    <items>
+                        <Menu fx:id="diocese_menu" mnemonicParsing="false" text="Diocese">
+                            <items>
+                                <CheckMenuItem fx:id="full_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="Full Name" />
+                                <CheckMenuItem fx:id="short_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="Short Name" />
+                                <CheckMenuItem fx:id="city_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="City" />
+                                <CheckMenuItem fx:id="state_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="State" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="bishop_menu" mnemonicParsing="false" text="Bishop">
+                            <items>
+                                <CheckMenuItem fx:id="first_bish_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="First Name" />
+                                <CheckMenuItem fx:id="last_bish_menu" mnemonicParsing="false" onAction="#changeCurrentOption" selected="true" text="Last Name" />
+                                <CheckMenuItem fx:id="title_bish_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="Title" />
+                            </items>
+                        </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem style="-fx-opacity: 1.0" text="Current Sort: Last Name" fx:id="current_sort" disable="true" />
+                    </items>
+                </Menu>
+
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Instructions" />
-                        <MenuItem mnemonicParsing="false" text="Go to website" fx:id="web_link" onAction="#openWeb" />
+                        <MenuItem fx:id="web_link" mnemonicParsing="false" onAction="#openWeb" text="Go to website" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
         <HBox spacing="20.0">
             <children>
-                <Label prefHeight="103.0" prefWidth="237.0" text='Welcome to Bishop Finder. To get started press "Choose File" or check the box "Create new document" then press run.' wrapText="true" />
+                <Label prefHeight="103.0" prefWidth="237.0" text="Welcome to Bishop Finder. To get started press &quot;Choose File&quot; or check the box &quot;Create new document&quot; then press run." wrapText="true" />
                 <Region />
                 <ImageView pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -62,7 +85,7 @@
             <children>
                 <Button fx:id="runButton" mnemonicParsing="false" onAction="#runProgram" prefHeight="27.0" prefWidth="93.0" text="Run" />
                 <Region prefHeight="27.0" prefWidth="58.0" />
-                <Label id="progressID" fx:id="progressID"/>
+                <Label id="progressID" fx:id="progressID" />
             </children>
             <VBox.margin>
                 <Insets bottom="8.0" left="8.0" right="8.0" />

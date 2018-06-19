@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class ExcelCompare {
@@ -85,9 +86,9 @@ public class ExcelCompare {
     /**
      * Compares a sheet to a given sheet and then edits the sheet with the changes if there are any
      * @param aSheet a XSSFSheet
-     * @param bList a BishopList
+     * @param bList a list of Type Bishop
      */
-    protected void compareAndWrite (XSSFSheet aSheet, BishopList bList) {
+    protected void compareAndWrite (XSSFSheet aSheet, List<Bishop> bList) {
 
         // Find the row headers
         Row dataRow;
@@ -185,10 +186,11 @@ public class ExcelCompare {
 
     /**
      * Compares a sheet to a given sheet and then edits the sheet with the changes if there are any
+     * This function uses the Salesforce Format
      * @param aSheet a XSSFSheet
-     * @param bList a BishopList
+     * @param bList a List of type Bishop
      */
-    protected void compareAndWrite_salesforce (XSSFSheet aSheet, BishopList bList) {
+    protected void compareAndWrite_salesforce (XSSFSheet aSheet, List<Bishop> bList) {
 
         // Find the row headers
         Row dataRow;
@@ -225,6 +227,7 @@ public class ExcelCompare {
 
                     case "Title":
                         dataCell = dataRow.getCell(cell.getColumnIndex(), Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        System.out.println(bishop.getLast() + " | " + bishop.getTitle() + " | " + dataCell.getStringCellValue());
                         compare(dataCell.getStringCellValue(), bishop.getTitle(), dataCell);
                         break;
 
@@ -263,7 +266,7 @@ public class ExcelCompare {
      * Compares two values. If the values are different then the cell is highlighted and the
      * new value is colored red. The format is as follows: "oldValue | newValue"
      * @param currentValue The value that is currently in the cell
-     * @param newValue The value that is in the BishopList
+     * @param newValue The value that is in the List<Bishop>
      * @param cell The cell that you would like to make the changes to
      */
     private void compare(String currentValue, String newValue, Cell cell) {

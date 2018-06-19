@@ -11,15 +11,36 @@
     <children>
         <MenuBar id="menuBar" fx:id="menuBar">
             <menus>
-                <Menu mnemonicParsing="false" text="Program">
+                <Menu mnemonicParsing="false" text="Switch Program">
                     <items>
                         <MenuItem fx:id="renew_salesforce" mnemonicParsing="false" onAction="#chooseProgram" text="SalesForce" />
                     </items>
                 </Menu>
+            <Menu fx:id="sort_menu" mnemonicParsing="false" text="Sort By:">
+              <items>
+                  <Menu fx:id="diocese_menu" mnemonicParsing="false" text="Diocese">
+                     <items>
+                        <CheckMenuItem fx:id="full_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="Full Name" />
+                        <CheckMenuItem fx:id="short_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="Short Name" />
+                        <CheckMenuItem fx:id="city_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="City" />
+                        <CheckMenuItem fx:id="state_dio_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="State" />
+                     </items>
+                  </Menu>
+                  <Menu fx:id="bishop_menu" mnemonicParsing="false" text="Bishop">
+                     <items>
+                        <CheckMenuItem fx:id="first_bish_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="First Name" />
+                        <CheckMenuItem fx:id="last_bish_menu" mnemonicParsing="false" onAction="#changeCurrentOption" selected="true" text="Last Name" />
+                        <CheckMenuItem fx:id="title_bish_menu" mnemonicParsing="false" onAction="#changeCurrentOption" text="Title" />
+                     </items>
+                  </Menu>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem style="-fx-opacity: 1.0" text="Current Sort: Last Name" fx:id="current_sort" disable="true" />
+              </items>
+            </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Instructions" />
-                        <MenuItem mnemonicParsing="false" text="Go to website" fx:id="web_link" onAction="#openWeb" />
+                        <MenuItem fx:id="web_link" mnemonicParsing="false" onAction="#openWeb" text="Go to website" />
                     </items>
                 </Menu>
             </menus>
@@ -59,9 +80,9 @@
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
             <children>
-                <Button fx:id="fileButton" mnemonicParsing="false" text="Choose File" onAction="#chooseFile" />
+                <Button fx:id="fileButton" mnemonicParsing="false" onAction="#chooseFile" text="Choose File" />
                 <Region prefHeight="27.0" prefWidth="150.0" />
-                <Button fx:id="runButton" mnemonicParsing="false" prefHeight="27.0" prefWidth="93.0" text="Run" onAction="#runProgram" />
+                <Button fx:id="runButton" mnemonicParsing="false" onAction="#runProgram" prefHeight="27.0" prefWidth="93.0" text="Run" />
             </children>
         </HBox>
     </children>
